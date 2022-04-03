@@ -1,5 +1,7 @@
 
 
 module.exports.user = function(req,res){
-    return res.send("<h1>Home </h1>");
+    return res.render('user_profile',{
+        title:"My Codial"
+    });
 }
