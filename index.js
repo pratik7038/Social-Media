@@ -5,11 +5,12 @@ const app = express();
 const port = 8000;
 
 const bodyParser = require("body-parser")
+app.use(bodyParser.urlencoded({extended:false}));
 const path = require("path")
 
 app.use(express.static('./assets'))
 
-
+const db = require("./config/mongoose");
 
 const expressLayouts = require("express-ejs-layouts")
 
