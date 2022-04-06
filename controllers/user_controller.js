@@ -23,13 +23,9 @@ module.exports.signUp_post = function(req,res){
 
     User.create(user,function(err,user){
         if(err)console.log(err);
+        user.save();
     })
-
-
-
-
-
-
+  
     return res.render('signUp',{
         title:"signedUp successfully"
     });
