@@ -3,6 +3,8 @@ const { redirect } = require("express/lib/response");
 const { session } = require("passport/lib");
 const User = require("../models/User")
 
+const Post = require('../models/post')
+
 module.exports.user = function(req,res){
     return res.render('user_profile',{
         title:"My Codial",
