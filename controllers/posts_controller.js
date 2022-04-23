@@ -1,6 +1,7 @@
 const Post = require('../models/post')
-
+const Comment = require('../models/comment')
 const User = require('../models/User')
+
 
 module.exports.create = function(req,res)
 {    
@@ -23,4 +24,23 @@ module.exports.create = function(req,res)
 
     res.redirect('back')
 
+}
+
+
+module.exports.destroy = function(req,res){
+    Post.findById(req.params.id,function(err,post){
+        if(post.user == req.user.id){
+            post.remove()
+
+            Comment.deleteMany({post:req.params.id},function(err){
+                return res.redirect("back")
+            })
+        }
+
+        else{
+            console.log("failed to delete the post")
+            return res.redirect('back')
+        }
+
+    })
 }
