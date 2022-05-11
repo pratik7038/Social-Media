@@ -2,6 +2,8 @@ const express = require("express")
 
 const Post = require('../models/post')
 
+const User = require('../models/User')
+
 module.exports.home = function(req,res){
     
     if (req.user) {
@@ -14,11 +16,15 @@ module.exports.home = function(req,res){
             path:'comments'
         })
         .exec(function(err,posts){  
+
+            User.find({},function(err,users){
                 res.render('home',{
                    title:"My Home Page",
                    post : posts,
-                   
-           }) 
+                   all_users : users
+                }) 
+            })
+
         })
 
 

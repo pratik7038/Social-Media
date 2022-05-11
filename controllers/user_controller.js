@@ -6,10 +6,14 @@ const User = require("../models/User")
 const Post = require('../models/post')
 
 module.exports.user = function(req,res){
-    return res.render('user_profile',{
-        title:"My Codial",
-        user: req.user
-    });
+
+    User.findById(req.params.id,function(err,user){
+        return res.render('user_profile',{
+            title:"My Codial",
+            user: user
+        });
+    })
+    
 }
 
 module.exports.signUp = function(req,res){
@@ -47,8 +51,7 @@ module.exports.signIn = function(req,res)
     })
 }
 
-module.exports.createSession = function(req,res){
-    console.log(res.locals.user);
+module.exports.createSession = function(req,res){ 
     return res.render('user_profile',{
          title:"My profile page",
          user: req.user
