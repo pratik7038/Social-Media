@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="/css/home.css">
 
 <div id="home-container">
@@ -11,16 +10,19 @@
                 <input type="submit" value="Post">
             </form>
             <% } %>
-   
-        <h1>The list of posts</h1>
-        <ul style="list-style: none">
-            <% for(i of post){ %>
 
-                <%-include('_post')-%>
+                <h1>The list of posts</h1>
+                <div id="posts-list-container">
 
-
-                    <% } %>
-        </ul>
+                    <ul style="list-style: none">
+                        <% for(post of posts){ %> 
+                            <%- include('_post') %>
+                        <% } %>
+                    </ul>
+                    
+                </div>
+                
+                        
     </section>
 
     <section id="user-friends">
@@ -33,7 +35,9 @@
                         <%= user.name %>
                     </a>
                 </li>
-                <% } %>
+            <% } %>
         </ul>
     </section>
 </div>
+
+<script src="/js/home_posts.js"></script>

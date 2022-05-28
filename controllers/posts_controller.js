@@ -1,44 +1,52 @@
 const Post = require('../models/post')
 const Comment = require('../models/comment')
 const User = require('../models/User')
+const { post } = require('../routes')
 
 
-module.exports.create = function(req,res)
-{    
-    console.log(res.locals.user.id)
-    var user_id = res.locals.user.id
-    User.findById( {_id: res.locals.user.id} , function(err,user){
-        var post = {
-            content : req.body.post,
-            user:res.locals.user.id 
-        };
+module.exports.create = async function (req, res) { 
 
-        console.log(post)
-        
-        Post.create(post,function(err,post){
-               if(err){console.log("error in posting ",err)}
-                   post.save()   
-           })
+    try{  
+        let post = await Post.create({
+            content: req.body.post, 
+            user: res.locals.user.id
+        })
 
-    });
+        if(req.xhr){
+            return res.status(200).json({
+                data:{
+                    post:post
+                },
+                message: "Post Created!"
+            })
+        }
 
-    res.redirect('back')
+
+        req.flash('success','Post Published')
+        return res.redirect('back')
+    }
+    catch(err){
+        req.flash('success',err)
+        return
+    }
 
 }
 
 
-module.exports.destroy = function(req,res){
-    Post.findById(req.params.id,function(err,post){
-        if(post.user == req.user.id){
+module.exports.destroy = function (req, res) {
+    
+    Post.findById(req.params.id, function (err, post) {
+        if (post.user == req.user.id) {
             post.remove()
 
-            Comment.deleteMany({post:req.params.id},function(err){
+            Comment.deleteMany({ post: req.params.id }, function (err) {
+                req.flash('success','Post deleted successfully')
                 return res.redirect("back")
             })
         }
 
-        else{
-            console.log("failed to delete the post")
+        else {
+            req.flash('error',"you cannot delete others post")
             return res.redirect('back')
         }
 

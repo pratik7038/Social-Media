@@ -1,8 +1,6 @@
-
 const { redirect } = require("express/lib/response");
 const { session } = require("passport/lib");
 const User = require("../models/User")
-
 const Post = require('../models/post')
 
 module.exports.user = function(req,res){
@@ -40,26 +38,25 @@ module.exports.signUp_post = function(req,res){
     });
 }
 
-
 module.exports.signIn = function(req,res)
 {
- 
-
     return res.render("user-sign-in",{
         title:"sign in page",
-         
     })
 }
 
-module.exports.createSession = function(req,res){ 
-    return res.render('user_profile',{
-         title:"My profile page",
-         user: req.user
-        })
+module.exports.createSession = async function(req,res){
+
+    await req.flash('success','Logged in successfully')
+
+    return res.redirect('/')
 }
 
 module.exports.destorySession = function(req,res)
 {
+    req.flash('success','Logged out successfully')
+    
     req.logout();
-    res.redirect("sign-in")
+    return res.redirect("/")
+
 }
