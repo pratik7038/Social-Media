@@ -18,7 +18,7 @@ module.exports.home = async function (req, res) {
             return res.render('home', {
                 title: "My Home Page",
                 posts: posts,
-                all_users: users    
+                all_users: users 
             })
     }
     catch (err) {

@@ -1,8 +1,7 @@
 
 const express = require("express")
 
-const app = express();
-
+const app = express(); 
 const port = 8000;
 
 const bodyParser = require("body-parser")
@@ -27,6 +26,8 @@ const flash = require('connect-flash')
 
 const customeMiddleware = require('./config/middleware')
 
+///make the uploads path available to the browser
+app.use('/uploads',express.static(__dirname+'/uploads'))
 app.use(expressLayouts);
 
 
@@ -70,8 +71,7 @@ app.use(session({
 }))
 
 app.use(passport.initialize());
-app.use(passport.session());
-
+app.use(passport.session()); 
 
 app.use(passport.setAuthenticatedUser)
 
@@ -81,3 +81,4 @@ app.use(customeMiddleware.setFlash)
 app.use('/',require("./routes"))
 
 app.listen(port,(err)=>{if(err)console.log(err);else console.log("server is up on the port : ",port)});
+ 

@@ -13,4 +13,9 @@ router.use('/posts',require('./posts'))
 
 router.use('/comments',require("./comments"))
 
+///error request handler
+router.get('*',(req,res)=>{return res.render('error',{
+    title:"Page Not Found"
+})});
+
 module.exports = router;

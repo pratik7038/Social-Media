@@ -1,17 +1,74 @@
 const { redirect } = require("express/lib/response");
 const { session } = require("passport/lib");
 const User = require("../models/User")
-const Post = require('../models/post')
+const Post = require('../models/post');
+const e = require("connect-flash");
 
-module.exports.user = function(req,res){
+const fs = require("fs") 
+const path = require('path')
 
-    User.findById(req.params.id,function(err,user){
+module.exports.user = function(req,res){ 
+
+    User.findById(req.params.id,function(err ,user){
         return res.render('user_profile',{
             title:"My Codial",
-            user: user
+            profile_user: user
         });
-    })
+    }) 
+}
+
+module.exports.update = async function(req,res){ 
     
+    console.log("Hey there im using js") 
+
+    // if(req.user.id == req.params.id){
+    //     User.findByIdAndUpdate(req.params.id, req.body, function(err, user){
+    //         req.flash('success','Updated!')
+    //         return res.redirect('back');
+    //     });
+    // }
+    // else
+    // {
+    //     req.flash('error','Unauthorized')
+    //     return res.status(401).send('Unauthorized');
+    // }
+
+    if(req.user.id == req.params.id){
+        
+        try{
+            let user = await User.findById(req.params.id);
+            User.uploadedAvatar(req,res, function(err){
+                if(err){
+                    console.log("**********multer err**********",err)
+                }
+                else{
+                    console.log(req.file)
+                    user.name = req.body.name;
+                    user.email = req.body.email;
+                    if(req.file){
+                        if (user.avatar) {
+                            fs.unlinkSync(path.join(__dirname, '..', user.avatar));
+                            //fs.unlinkSync - delete a name and possibly the file it refers to.
+                        }
+                        user.avatar = User.avatarPath + '/' + req.file.filename
+                    }
+                    user.save();
+                    return res.redirect('back')
+                }
+            })
+        }
+        catch(err){
+            
+            req.flash('error',err)
+            return res.redirect('back');
+        }
+    }
+    else{
+        
+         req.flash('error','Unauthorized')
+         return res.status(401).send('Unauthorized');
+    }
+
 }
 
 module.exports.signUp = function(req,res){
