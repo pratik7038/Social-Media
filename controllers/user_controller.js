@@ -102,10 +102,8 @@ module.exports.signIn = function(req,res)
     })
 }
 
-module.exports.createSession = async function(req,res){
-
-    await req.flash('success','Logged in successfully')
-
+module.exports.createSession = async function(req,res){ 
+    await req.flash('success','Logged in successfully') 
     return res.redirect('/')
 }
 

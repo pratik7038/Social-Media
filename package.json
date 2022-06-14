@@ -26,6 +26,8 @@
 
     "connect-mongo": "^4.6.0",
 
+    "crypto": "^1.0.1",
+
     "ejs": "^3.1.6",
 
     "express": "^4.17.3",
@@ -33,6 +35,8 @@
     "express-ejs-layouts": "^2.5.1",
 
     "express-session": "^1.17.2",
+
+    "jsonwebtoken": "^8.5.1",
 
     "mongoose": "^6.2.9",
 
@@ -45,6 +49,10 @@
     "noty": "^3.2.0-beta-deprecated",
 
     "passport": "^0.5.2",
+
+    "passport-google-oauth": "^2.0.0",
+
+    "passport-jwt": "^4.0.0",
 
     "passport-local": "^1.0.0"
 
