@@ -2,10 +2,14 @@ const { redirect } = require("express/lib/response");
 const { session } = require("passport/lib");
 const User = require("../models/User")
 const Post = require('../models/post');
+const ForgetPassword = require('../models/ForgetPassword')
+const ForgetPasswordMailer = require('../mailers/forgetPasswordMailer')
 const e = require("connect-flash");
 
 const fs = require("fs") 
 const path = require('path')
+
+const crypto = require('crypto')
 
 module.exports.user = function(req,res){ 
 
@@ -83,13 +87,13 @@ module.exports.signUp_post = function(req,res){
         email:req.body.email,
         password:req.body.password,
         name:req.body.name
-    } 
+    }
 
     User.create(user,function(err,user){
-        if(err)console.log(err);
+        if(err){console.log(err);return;}
         user.save();
     })
-  
+
     return res.render('signUp',{
         title:"signedUp successfully"
     });
@@ -113,5 +117,63 @@ module.exports.destorySession = function(req,res)
     
     req.logout();
     return res.redirect("/")
+}
 
+module.exports.forgetPassword = function(req,res){
+    return res.render('forget-password',{
+        title:"forgetPassword"
+    }) 
+}
+
+exports.generateAccessToken = async function(req,res)
+{
+    let user =  await User.findOne({email:req.body.email});
+    if(!user){return res.send("<h1>User Does Not Exists</h1>")}
+    let random_value =  crypto.randomBytes(20).toString('hex')
+    await ForgetPassword.create({
+        email:req.body.email,
+        token : random_value,
+        isValid : true
+    }) 
+
+    let data = {
+        email:req.body.email,
+        token : random_value 
+    } 
+    ForgetPasswordMailer.resetLink(data) 
+    return res.send("<h1>Reset password link is sent on the registered email address</h1>")
+}
+
+exports.setNewPassword = async function(req,res)
+{
+    await console.log(req.query.token)
+    let access = false;
+    ////forget password model's object
+    let obj = await ForgetPassword.findOne({token:req.query.token})
+
+    ///for handling it in view
+    console.log(obj)
+    if(obj.isValid) {access = true}
+    obj.isValid = false
+    obj.save()
+    
+    return res.render('new-password',
+    {
+        title:"update password",
+        obj:obj,
+        access:access
+    });
+} 
+
+exports.updatePassword = async (req,res)=>{   
+    if(req.body.new_password != req.body.confirm_password){
+        return res.send("<h1> Both Password Should Match </h1>")
+    } 
+    User.findOne({email:req.body.email},function(err,user){
+        if(err){console.log(err)}
+        // console.log(user)
+        user.password = req.body.new_password;
+        user.save()
+    })
+    return res.redirect('/')
 }
