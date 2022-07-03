@@ -11,6 +11,8 @@ router.post("/sign-up",userController.signUp_post)
 router.get('/sign-in',userController.signIn)
 router.get('/sign-out',userController.destorySession)
 
+router.post('/addfriend',userController.addFriend)
+
 router.get('/auth/google',passport.authenticate('google',{scope:['profile','email']}))
 
 router.get('/auth/google/callback',passport.authenticate('google',{failureRedirect : '/users/sign-in'}),userController.createSession)
@@ -19,8 +21,6 @@ router.get('/auth/google/callback',passport.authenticate('google',{failureRedire
 router.post('/create-session',
             passport.authenticate('local',{failureRedirect:'/users/sign-in'})
             ,userController.createSession);
-
-
 ///forget password route
 ///1) for getting email for reseting password 
 router.get('/forget-password',userController.forgetPassword)
@@ -33,6 +33,4 @@ router.get('/new-password',userController.setNewPassword)
 
 router.post('/update-password',userController.updatePassword)
 
-module.exports = router;
-
-    
+module.exports = router;   

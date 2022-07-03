@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/home.css">
 
 <div id="home-container">
-
+    
     <section id="feed-post">
         <h4>Posts</h4>
         <% if(locals.user) { %>
@@ -10,23 +10,20 @@
                 <input type="submit" value="Post">
             </form>
             <% } %>
-
                 <h1>The list of posts</h1>
                 <div id="posts-list-container">
-
                     <ul style="list-style: none">
-                        <% for(post of posts){ %> 
+                        <% for(post of posts){ %>
                             <%- include('_post') %>
-                        <% } %>
+                                <% } %>
                     </ul>
-                    
+
                 </div>
-                
-                        
+
     </section>
 
     <section id="user-friends">
-        <h1>Friends</h1>
+        <h1>Users</h1>
 
         <ul style="list-style-type: none;">
             <% for(user of all_users){ %>
@@ -35,9 +32,28 @@
                         <%= user.name %>
                     </a>
                 </li>
-            <% } %>
+                <% } %>
         </ul>
     </section>
+
+    <section id="friends">
+        <h1>Friends</h1>
+
+        <% if(friends.length==0){ %>
+            <h2>Lets start making new Friends</h2>
+            <% }else { %>
+                <ul style="list-style-type: none;">
+                    <% for(user of friends){ %>
+                        <li>
+                            <a href="users/profile/<%=user.id%>">
+                                <%= user.name %>
+                            </a>
+                        </li>
+                        <% } %>
+                </ul>
+                <% } %>
+    </section>
+
 </div>
 
 <script src="/js/home_posts.js"></script>

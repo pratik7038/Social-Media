@@ -20,6 +20,13 @@
                 <%= profile_user.email %>
             </p>
         </h1>
+        <% if(locals.user){ %>
+            <form action="/users/addfriend" method="POST">
+                <input type="hidden" name="friendId" value="<%= profile_user.id %>">
+                <input type="submit" value="Add/Remove Friend"> 
+            </form>
+        <% } %>
 
     <% } %>
             <a href="/">Home</a>
+

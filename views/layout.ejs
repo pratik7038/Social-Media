@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/chat.css">
     <%- style %>
 </head>
 
@@ -27,7 +28,7 @@
 
 
         <%- body %>
-
+        <%- include('_chat'); %>
             <%- include('_footer'); %>
 
                 <%- script %>
@@ -57,7 +58,8 @@
                     <% } %>
 
                     </script>
-
+    
+   
 </body>
 
 </html>

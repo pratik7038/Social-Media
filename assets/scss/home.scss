@@ -1,14 +1,22 @@
-#home-container{
-    display: flex;
-    #feed-post{
+#home-container{ 
+
+    padding-left: 20px; 
+    #feed-posts{
         width: 70%;
         padding: 10px;
-    }
-
-    #user-friends{
-        width: 30px;
+    } 
+    #user-friends {
+        width: 30%;
         padding: 10px;
-        border-left: 1px solid lightgray;
+        border-left: 1px solid rgb(31, 48, 71);
         height: 100%;
+    } 
+
+    #friends{
+        height: 100%;
+        width: 30%;
+        padding: 10px;
+        border-left: 1px solid black;
     }
+    
 }
