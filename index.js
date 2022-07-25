@@ -1,14 +1,14 @@
-
 const express = require("express")
-
 const app = express(); 
 const port = 8000;
+
+const env = require("./config/environment")
 
 const bodyParser = require("body-parser")
 app.use(bodyParser.urlencoded({extended:false}));
 const path = require("path")
 
-app.use(express.static('./assets'))
+app.use(express.static(env.asset_path))
 
 const db = require("./config/mongoose");
 
@@ -23,6 +23,15 @@ const passportGoogle = require('./config/passport-google-oauth2-strategy')
 
 const MongoStore = require('connect-mongo');
 const sassMiddleware = require('node-sass-middleware');
+
+
+///socket
+const chatServer = require('http').Server(app)
+const chatSocket = require('./config/chat_socket').chatSocket(chatServer)
+chatServer.listen(5000)
+console.log("Chat Server is listening on port 5000")
+
+///setup the chat server to be used with socket.io
 
 ///falsh messages
 const flash = require('connect-flash')
@@ -44,11 +53,10 @@ app.set('view engine','ejs');
 app.set('views','./views')
 
 
-
 ////using sass middleware
 app.use(sassMiddleware({
-    src:'./assets/scss',
-    dest:'./assets/css',
+    src:path.join(__dirname,env.asset_path,'/scss'),
+    dest:path.join(__dirname,env.asset_path,'/css'),
     debug:true,
     outputStyle:'extended',
     prefix:'/css'
@@ -59,7 +67,7 @@ app.use(sassMiddleware({
 app.use(session({
     name:'codial',
     ///TODO -> change the secrete before deployment
-    secret:'blahsomething',
+    secret:env.session_cookie_key,
     saveUninitialized:true,
     resave:false,
     cookie:{
